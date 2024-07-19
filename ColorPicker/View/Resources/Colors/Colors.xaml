@@ -1,0 +1,39 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush
+        x:Key="DarkGray"
+        Color="#14141A" />
+    <SolidColorBrush
+        x:Key="MediumDarkGray"
+        Color="#2C2C38" />
+    <SolidColorBrush
+        x:Key="MediumGray"
+        Color="#3C3C4D" />
+    <SolidColorBrush
+        x:Key="MediumLightGray"
+        Color="#515166" />
+    <SolidColorBrush
+        x:Key="LightGray"
+        Color="#656580" />
+
+    <SolidColorBrush
+        x:Key="DarkYellow"
+        Color="#C4A756" />
+    <SolidColorBrush
+        x:Key="MediumDarkYellow"
+        Color="#D9B85F" />
+    <SolidColorBrush
+        x:Key="MediumYellow"
+        Color="#EFCB68" />
+    <SolidColorBrush
+        x:Key="MediumLightYellow"
+        Color="#FFDD7D" />
+    <SolidColorBrush
+        x:Key="LightYellow"
+        Color="#FFE398" />
+
+    <SolidColorBrush
+        x:Key="White"
+        Color="#E1EFE6" />
+</ResourceDictionary>

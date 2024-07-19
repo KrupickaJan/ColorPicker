@@ -1,0 +1,348 @@
+﻿<Window
+    x:Class="ColorPicker.View.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:ColorPicker.View"
+    xmlns:UserControls="clr-namespace:ColorPicker.View.UserControls"
+    mc:Ignorable="d"
+    WindowStyle="SingleBorderWindow"
+    Background="{DynamicResource DarkGray}"
+    Title="MainWindow"
+    Icon="Resources/Images/color-dropper.png"
+    Height="388"
+    MaxHeight="388"
+    MinHeight="388"
+    Width="364"
+    MinWidth="364"
+    MouseLeftButtonDown="Window_MouseLeftButtonDown"
+    ResizeMode="CanResize">
+
+    <!--Windows Chrome settings to reach desired window design-->
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="1"
+            CornerRadius="0"
+            ResizeBorderThickness="4"
+            GlassFrameThickness="0" />
+    </WindowChrome.WindowChrome>
+    <Grid>
+        <Border
+            BorderThickness="1"
+            BorderBrush="{DynamicResource MediumGray}"
+            Style="{DynamicResource MainWindowBorder}">
+
+            <!-- Main grid layout -->
+            <Grid
+                Margin="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="30" />
+                    <RowDefinition
+                        Height="4*" />
+                    <RowDefinition
+                        Height="0.25*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="20" />
+                    <ColumnDefinition
+                        Width="4*" />
+                    <ColumnDefinition
+                        Width="20" />
+                </Grid.ColumnDefinitions>
+
+                <UserControls:TitleBar
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3" />
+
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="3*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="80" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Column="0"
+                        Width="40"
+                        Height="40"
+                        Command="{Binding PickColor}"
+                        Style="{DynamicResource PickereButtonStyle}">
+                        <Image
+                            Source="Resources/Images/color-dropper_button.png"
+                            Width="20" />
+                    </Button>
+
+                    <ListView
+                        x:Name="ColorsHistory"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        Height="95"
+                        VerticalAlignment="Top"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        ItemsSource="{Binding ColorsHistory}"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        SelectedItem="{Binding ColorItem}"
+                        Foreground="Transparent"
+                        d:ItemsSource="{d:SampleData ItemCount=5}">
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem
+                                    Header="Remove"
+                                    Background="{DynamicResource MediumGray}"
+                                    BorderBrush="{DynamicResource MediumGray}"
+                                    Foreground="{DynamicResource White}"
+                                    Command="{Binding DeleteItem}"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Name="ColectedColorsView"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Rectangle
+                                        RadiusX="5"
+                                        RadiusY="5"
+                                        Width="40"
+                                        Height="40"
+                                        Stroke="{DynamicResource MediumDarkGray}"
+                                        StrokeThickness="0.5"
+                                        Margin="19,15,19,30">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush
+                                                Color="{Binding Path=.}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style
+                                TargetType="{x:Type ListViewItem}">
+                                <Setter
+                                    Property="FocusVisualStyle"
+                                    Value="{x:Null}" />
+
+                                <Setter
+                                    Property="KeyboardNavigation.TabNavigation"
+                                    Value="Local" />
+                                <Setter
+                                    Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate
+                                            TargetType="ListViewItem">
+                                            <Grid
+                                                x:Name="RootGrid"
+                                                Height="95">
+                                                <Rectangle
+                                                    x:Name="SelectionStroke"
+                                                    RadiusX="9"
+                                                    RadiusY="9"
+                                                    Width="48"
+                                                    Height="48"
+                                                    Margin="11,11,11,26"
+                                                    Fill="Transparent"
+                                                    Opacity="0"
+                                                    StrokeThickness="2">
+                                                    <Rectangle.Stroke>
+                                                        <SolidColorBrush
+                                                            Color="{Binding Path=.}" />
+                                                    </Rectangle.Stroke>
+                                                </Rectangle>
+                                                <ContentPresenter />
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger
+                                                    Property="IsSelected"
+                                                    Value="True">
+                                                    <Setter
+                                                        TargetName="SelectionStroke"
+                                                        Property="Opacity"
+                                                        Value="1" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+
+                    <Grid
+                        Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="0.25*" />
+                            <ColumnDefinition
+                                Width="0.5*" />
+                            <ColumnDefinition
+                                Width="0.25*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="0.25*" />
+                            <RowDefinition
+                                Height="2.5*" />
+                            <RowDefinition
+                                Height="0.25*" />
+                        </Grid.RowDefinitions>
+                        <Rectangle
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Fill="{Binding ColorRec}"
+                            RadiusX="5"
+                            RadiusY="5"
+                            Stroke="{DynamicResource MediumDarkGray}"
+                            StrokeThickness="0.5" />
+                    </Grid>
+                    <Grid
+                        Grid.Row="1"
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="20" />
+                            <ColumnDefinition
+                                Width="3*" />
+                            <ColumnDefinition
+                                Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="0.25*" />
+                            <RowDefinition
+                                Height="0.5*" />
+                            <RowDefinition
+                                Height="0.5*" />
+                            <RowDefinition
+                                Height="0.5*" />
+                            <RowDefinition
+                                Height="0.5*" />
+                            <RowDefinition
+                                Height="0.5*" />
+                            <RowDefinition
+                                Height="0.25*" />
+                        </Grid.RowDefinitions>
+                        <Border
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            BorderBrush="{DynamicResource MediumGray}"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="40" />
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="40" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="RGB"
+                                    Foreground="{DynamicResource LightGray}"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center" />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Background="Transparent"
+                                    Text="{Binding RGB}"
+                                    Foreground="{DynamicResource White}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0" />
+                            </Grid>
+                        </Border>
+                        <Border
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            BorderBrush="{DynamicResource MediumGray}"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="40" />
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="40" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="HEX"
+                                    Foreground="{DynamicResource LightGray}"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center" />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Background="Transparent"
+                                    Text="{Binding HEX}"
+                                    Foreground="{DynamicResource White}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0" />
+                            </Grid>
+                        </Border>
+                        <Border
+                            Grid.Column="1"
+                            Grid.Row="5"
+                            BorderBrush="{DynamicResource MediumGray}"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="40" />
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="40" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="HSV"
+                                    Foreground="{DynamicResource LightGray}"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center" />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Background="Transparent"
+                                    Text="{Binding HSV}"
+                                    Foreground="{DynamicResource White}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0" />
+                            </Grid>
+                        </Border>
+
+
+
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
